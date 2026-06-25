@@ -38,12 +38,21 @@ public class BudgetService {
 
         LocalDate now = LocalDate.now();
 
-        Budget budget = Budget.builder()
-                .amount(request.getAmount())
-                .month(now.getMonthValue())
-                .year(now.getYear())
-                .user(user)
-                .build();
+        Budget budget = budgetRepository
+                .findByUserAndMonthAndYear(
+                        user,
+                        now.getMonthValue(),
+                        now.getYear()
+                )
+                .orElse(
+                        Budget.builder()
+                                .user(user)
+                                .month(now.getMonthValue())
+                                .year(now.getYear())
+                                .build()
+                );
+
+        budget.setAmount(request.getAmount());
 
         Budget savedBudget =
                 budgetRepository.save(budget);

@@ -84,6 +84,8 @@ public class ExpenseService {
                         .build())
                 .toList();
     }
+
+
     public ExpenseResponse getExpenseById(Long expenseId) {
 
         String email = SecurityContextHolder
