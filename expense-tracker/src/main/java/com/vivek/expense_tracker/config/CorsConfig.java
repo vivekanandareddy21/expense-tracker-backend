@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
@@ -14,21 +12,42 @@ import java.util.List;
 public class CorsConfig {
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
+    public CorsConfigurationSource corsConfigurationSource() {
 
-        return new WebMvcConfigurer() {
+        CorsConfiguration configuration =
+                new CorsConfiguration();
 
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
+        configuration.setAllowedOrigins(
+                List.of(
+                        "http://localhost:5173",
+                        "https://expense-tracker-frontend-mtibls15q-vivekanandareddy21s-projects.vercel.app"
+                )
+        );
 
-                registry.addMapping("/**")
-                        .allowedOrigins(
-                                "http://localhost:5173",
-                                "https://expense-tracker-frontend-jet-nine.vercel.app"
-                        )
-                        .allowedMethods("*")
-                        .allowedHeaders("*");
-            }
-        };
+        configuration.setAllowedMethods(
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "DELETE",
+                        "OPTIONS"
+                )
+        );
+
+        configuration.setAllowedHeaders(
+                List.of("*")
+        );
+
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
+
+        return source;
     }
 }
